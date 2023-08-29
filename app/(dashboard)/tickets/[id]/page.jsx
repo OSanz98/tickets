@@ -22,6 +22,16 @@ export async function generateStaticParams() {
     }))
 }
 
+export async function generateMetadata({ params }){
+    const id = params.id
+    const res = await fetch(`http://localhost:4000/tickets/${id}`)
+    const ticket = await res.json()
+
+    return {
+        title: `Ticket Dashboard | ${ticket.title}`
+    }
+}
+
 async function getTicket(id) {
     await new Promise(resolve => setTimeout(resolve, 3000))
     
