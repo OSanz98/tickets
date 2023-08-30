@@ -2,8 +2,9 @@ import React from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
 import Logo from './tickets-logo.png'
+import LogoutButton from './LogoutButton'
 
-export default function Navbar() {
+export default function Navbar({user}) {
   return(
     <nav>
         <Image src={Logo} alt="Tickets logo" width={75} quality={100} placeholder='blur'/>
@@ -13,7 +14,12 @@ export default function Navbar() {
         and handling the routing on the front-end it prefects that page in the background, 
         so when we click on that link, it already has the page ready to show. */}
         <Link href="/">Dashboard</Link>
-        <Link href="/tickets">Tickets</Link>
+        {/* mr-auto tells everything that follows it to be on the right - in context of using flex components */}
+        <Link href="/tickets" className='mr-auto'>Tickets</Link>
+        {user && (
+          <span>Hello, {user.email}</span>
+        )}
+        <LogoutButton />
     </nav>
   )
 }
