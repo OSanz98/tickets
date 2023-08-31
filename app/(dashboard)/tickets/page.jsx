@@ -18,8 +18,10 @@ export default function Tickets() {
             <p><small>Currently open tickets</small></p>
           </div>
           <Link href='/tickets/create' className='ml-auto'>
-            <FaPlus />
-            <button className="btn-primary">New Ticket</button>
+            <button className="btn-primary">
+              <FaPlus />
+              New Ticket
+            </button>
           </Link>
         </nav>
 
