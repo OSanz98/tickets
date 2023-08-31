@@ -21,18 +21,19 @@ export default function CreateForm() {
         e.preventDefault()
         setIsLoading(true)
 
-        const ticket = {
-            title, body, priority, user_email: 'tester@tester.com'
-        }
-        const res = await fetch('http://localhost:4000/tickets', {
+        const ticket = { title, body, priority }
+        const res = await fetch('http://localhost:3000/api/tickets', {
             method: 'POST',
             headers: {"Content-Type":"application/json"},
             body: JSON.stringify(ticket)
         })
 
-        if(res.status === 201) {
-            // tells react router to refresh content in the background and pre-render page,
-            // with updated content.
+        const json = await res.json()
+
+        if (json.error) {
+            console.log(error.message);
+        }
+        if(json.data) {
             router.refresh()
             router.push('/tickets')
         }

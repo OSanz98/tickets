@@ -1,3 +1,4 @@
+import { createRouteHandlerClient } from "@supabase/auth-helpers-nextjs";
 import axios from "axios";
 import { NextResponse } from "next/server";
 // Normally if you were to fetch data from an api, you should do it in the server component instead.
@@ -21,29 +22,48 @@ import { NextResponse } from "next/server";
 export const dynamic = 'force-dynamic';
 
 
-export async function GET() {
-    const res = await axios.get('http://localhost:4000/tickets');
-    const tickets = await res.data
+// export async function GET() {
+//     const res = await axios.get('http://localhost:4000/tickets');
+//     const tickets = await res.data
 
-    // sends response as JSON - we can also pass params to specify options like as follows
-    return NextResponse.json(tickets, {
-        status: 200
-    });
-}
+//     // sends response as JSON - we can also pass params to specify options like as follows
+//     return NextResponse.json(tickets, {
+//         status: 200
+//     });
+// }
 
 
-export async function POST(request) {
-    const ticket = await request.json()
+// export async function POST(request) {
+//     const ticket = await request.json()
 
-    const res = await fetch('http://localhost:4000/tickets', {
-        method: 'POST',
-        headers: {"Content-Type":"application/json"},
-        body: JSON.stringify(ticket)
-    })
+//     const res = await fetch('http://localhost:4000/tickets', {
+//         method: 'POST',
+//         headers: {"Content-Type":"application/json"},
+//         body: JSON.stringify(ticket)
+//     })
 
-    const newTicket = await res.json()
+//     const newTicket = await res.json()
 
-    return NextResponse.json(newTicket, {
-        status:201
-    })
+//     return NextResponse.json(newTicket, {
+//         status:201
+//     })
+// }
+
+export async function POST(request){
+    const ticket = await request.json();
+
+    // get supabase instance
+    const supabase = createRouteHandlerClient();
+
+    // get current user session
+    const {data: {session}} = await supabase.auth.getSession();
+
+    // insert data into database - from is used to reach a database and get data from it or insert into
+    // .single() ensures that we get it back as a single object and not array (which is default behavior)
+    const { data, error } = await supabase.from('Tickets').insert({
+        ...ticket,
+        user_email: session.user.email
+    }).select().single();
+
+    return NextResponse.json({ data, error });
 }

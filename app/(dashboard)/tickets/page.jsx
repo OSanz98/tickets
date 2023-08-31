@@ -1,6 +1,8 @@
 import React, { Suspense } from 'react'
 import TicketsList from './TicketsList'
 import Loading from '../loading'
+import Link from 'next/link'
+import {FaPlus} from 'react-icons/fa'
 /**
  * By default, components are server components (static content),
  * if we want to add interactivity to a component, then we need to specify it as a client component
@@ -15,6 +17,10 @@ export default function Tickets() {
             <h2>Tickets</h2>
             <p><small>Currently open tickets</small></p>
           </div>
+          <Link href='/tickets/create' className='ml-auto'>
+            <FaPlus />
+            <button className="btn-primary">New Ticket</button>
+          </Link>
         </nav>
 
 

@@ -1,6 +1,10 @@
 import './globals.css'
 import { Rubik } from 'next/font/google'
 
+// tells next js (for production purposes) to not statically create pages
+// we need it to be dynamic because we are using cookies.
+export const dynamic = 'force-dynamic'
+
 // this is how we create fonts - they are self-hosted
 const rubik = Rubik({ subsets: ['latin'] })
 
