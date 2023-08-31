@@ -1,81 +1,67 @@
-"use client"
-// ^ when using an interactive component we will need to hydrate it in the browser, so it needs to be
-// a client component. All components in app folder are server by default.
-
-import React, {useState} from 'react'
-import { useRouter } from 'next/navigation'
+import React from 'react'
+import { addTicket } from '../actions'
+import SubmitButton from '@/app/components/SubmitButton'
 
 
 export default function CreateForm() {
-    const router = useRouter()
 
 
-    const [title, setTitle] = useState('')
-    const [body, setBody] = useState('')
-    const [priority, setPriority] = useState('low')
-    const [isLoading, setIsLoading] = useState(false)
 
+    // const handleSubmit = async (e) => {
+    //     // prevents form from refreshing the page (default action of form)
+    //     e.preventDefault()
+    //     setIsLoading(true)
 
-    const handleSubmit = async (e) => {
-        // prevents form from refreshing the page (default action of form)
-        e.preventDefault()
-        setIsLoading(true)
+    //     const ticket = { title, body, priority }
+    //     const res = await fetch('http://localhost:3000/api/tickets', {
+    //         method: 'POST',
+    //         headers: {"Content-Type":"application/json"},
+    //         body: JSON.stringify(ticket)
+    //     })
 
-        const ticket = { title, body, priority }
-        const res = await fetch('http://localhost:3000/api/tickets', {
-            method: 'POST',
-            headers: {"Content-Type":"application/json"},
-            body: JSON.stringify(ticket)
-        })
+    //     const json = await res.json()
 
-        const json = await res.json()
-
-        if (json.error) {
-            console.log(error.message);
-        }
-        if(json.data) {
-            router.refresh()
-            router.push('/tickets')
-        }
-    }
+    //     if (json.error) {
+    //         console.log(error.message);
+    //     }
+    //     if(json.data) {
+    //         router.refresh()
+    //         router.push('/tickets')
+    //     }
+    // }
 
     return (
-        <form onSubmit={handleSubmit} className='w-1/2'>
+        <form action={addTicket} className='w-1/2'>
             <label>
                 <span>Title:</span>
-                <input 
+                <input
                     required 
                     type="text" 
-                    name="title" 
-                    onChange={(e) => setTitle(e.target.value)}
-                    value={title} 
+                    name="title"
                 />
             </label>
             <label>
                 <span>Body:</span>
                 <textarea 
                     required 
-                    name="body" 
-                    value={body}
-                    onChange={(e) => setBody(e.target.value)}
+                    name="body"
                 />
             </label>
             <label>
                 <span>Priority:</span>
                 <select 
                     name="priority"
-                    onChange={(e) => setPriority(e.target.value)}
-                    value={priority}
                 >
                 <option value="low">Low Priority</option>
                 <option value="medium">Medium Priority</option>
                 <option value="high">High Priority</option>
                 </select>
             </label>
-            <button className="btn-primary" disabled={isLoading}>
+            <SubmitButton />
+            {/* <button className="btn-primary" disabled={isLoading}>
                 {isLoading && <span>Adding...</span>}
                 {!isLoading && <span>Add Ticket</span>}
-            </button>
+            </button> */}
         </form>
     )
 }
